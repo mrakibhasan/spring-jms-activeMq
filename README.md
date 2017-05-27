@@ -2,7 +2,7 @@
 JMS (Java Message Service) is an API that provides the facility to create, send and read messages.
 It provides loosely coupled, reliable and asynchronous communication.
 
-    In this project folder I have added two project repos one JmsConsumer and and JmsProducer. 
+    In this project folder I have added two project repos one is JmsConsumer and other is JmsProducer. 
     The project is deveoped by spring framework which  provides JmsTemlate to write down the java message serivce.
 
     How To run this program:
