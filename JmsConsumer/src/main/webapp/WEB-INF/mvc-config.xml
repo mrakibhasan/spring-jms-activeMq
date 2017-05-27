@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:component-scan base-package="com.jms" />
+	
+	<mvc:annotation-driven />
+
+	
+	<bean id="consumerListener" class="com.jms.consumer.ConsumerListener"></bean>
+	<bean id="connFactory" 	class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="tcp://localhost:61616"></property>
+	</bean>
+	<bean id="defaultDestination"
+		class="org.apache.activemq.command.ActiveMQQueue"> 	<constructor-arg value="CONSUMER.QUEUE"></constructor-arg>
+	</bean>
+	<!-- <bean id="rmeDestination"
+		class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="RME.QUEUE"></constructor-arg>
+	</bean>
+	 -->
+	<bean id="JMSMessageListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connFactory"></property>
+		<property name="messageListener" ref="consumerListener"></property>
+		<property name="destination" ref="defaultDestination"></property>
+		<property name="concurrentConsumers" value="30"></property>
+	</bean>
+	<bean id="jmsTemplate" 	class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connFactory"></property>
+		<property name="defaultDestination" ref="defaultDestination"></property>
+	</bean>
+
+</beans>
